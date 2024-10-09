@@ -58,8 +58,13 @@ let createCert = ( serialNumber ) => {
       thingName: serialNumber,
       principal: certdata.certificateArn
     };
+    var attachPolicyParamsExchangeTokenRoleAlias = {
+      policyName: "GreengrassCoreTokenExchangeRoleAliasPolicy",
+      target: certdata.certificateArn 
+    };
     return Promise.all([
       iot.attachPolicy(attachPolicyParams).promise(),
+      iot.attachPolicy(attachPolicyParamsExchangeTokenRoleAlias).promise(),
       iot.attachThingPrincipal(attachThingParams).promise()
     ]).then(() => {
       console.log('attached policy and thing to certificate')
