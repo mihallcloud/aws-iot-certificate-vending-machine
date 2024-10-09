@@ -115,3 +115,49 @@ Resources:
             - iot:GetThingShadow
             - iot:UpdateThingShadow
             Resource: "*"
+  GreengrassV2TokenExchangeRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      RoleName: 'GreengrassV2TokenExchangeRole'
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: 'Allow'
+            Principal:
+              Service: 'credentials.iot.amazonaws.com'
+            Action: 'sts:AssumeRole'
+
+  GreengrassV2TokenExchangeRoleAccessPolicy:
+    Type: 'AWS::IAM::Policy'
+    Properties:
+      PolicyName: 'GreengrassV2TokenExchangeRoleAccess'
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: 'Allow'
+            Action:
+              - 'logs:CreateLogGroup'
+              - 'logs:CreateLogStream'
+              - 'logs:PutLogEvents'
+              - 'logs:DescribeLogStreams'
+              - 's3:GetBucketLocation'
+            Resource: '*'
+      Roles:
+        - Ref: 'GreengrassV2TokenExchangeRole'
+
+  GreengrassCoreTokenExchangeRoleAlias:
+    Type: 'AWS::IoT::RoleAlias'
+    Properties:
+      RoleAlias: 'GreengrassCoreTokenExchangeRoleAlias'
+      RoleArn: !GetAtt GreengrassV2TokenExchangeRole.Arn
+
+  GreengrassCoreTokenExchangeRoleAliasPolicy:
+    Type: 'AWS::IoT::Policy'
+    Properties:
+      PolicyName: 'GreengrassCoreTokenExchangeRoleAliasPolicy'
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: 'Allow'
+            Action: 'iot:AssumeRoleWithCertificate'
+            Resource: 'arn:aws:iot:us-east-1:290643147438:rolealias/GreengrassCoreTokenExchangeRoleAlias'
