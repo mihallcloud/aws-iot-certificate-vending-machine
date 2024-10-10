@@ -160,4 +160,4 @@ Resources:
         Statement:
           - Effect: 'Allow'
             Action: 'iot:AssumeRoleWithCertificate'
-            Resource: 'arn:aws:iot:us-east-1:290643147438:rolealias/GreengrassCoreTokenExchangeRoleAlias'
+            Resource: !Sub 'arn:aws:iot:${AWS::Region}:${AWS::AccountId}:rolealias/GreengrassCoreTokenExchangeRoleAlias'
