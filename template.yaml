@@ -20,7 +20,7 @@ Resources:
   CVMIoTResource:
     Type: 'AWS::Serverless::Function'
     Properties:
-      Runtime: nodejs10.x
+      Runtime: nodejs16.x
       MemorySize: 1024
       Timeout: 15
       CodeUri: ./lambda
